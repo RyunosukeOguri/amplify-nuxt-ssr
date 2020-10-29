@@ -9,9 +9,21 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 
+interface Post {
+  id: number
+  title: string
+  body: string
+}
+
 @Component
 export default class PostDetail extends Vue {
-  post = {}
+  post: Post | null = null
+
+  head() {
+    return {
+      title: this.post ? this.post.title : '',
+    }
+  }
 
   async asyncData({ app, params }: { app: any; params: any }) {
     const { data } = await app.$axios.get(
