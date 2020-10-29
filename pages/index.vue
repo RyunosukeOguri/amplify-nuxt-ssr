@@ -3,32 +3,33 @@
     <div>
       <Logo />
       <h1 class="title">amplify-nuxt-ssr</h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      <ul class="c-list">
+        <li v-for="post of posts" :key="post.id">
+          <n-link :to="`/posts/${post.id}`">{{
+            `#${post.id} ${post.title}`
+          }}</n-link>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Component, Vue } from 'nuxt-property-decorator'
 
-export default Vue.extend({})
+@Component
+export default class Index extends Vue {
+  posts: any = []
+
+  async asyncData({ app }: { app: any }) {
+    const { data } = await app.$axios.get(
+      'https://jsonplaceholder.typicode.com/posts'
+    )
+    return {
+      posts: data,
+    }
+  }
+}
 </script>
 
 <style>
@@ -59,7 +60,12 @@ export default Vue.extend({})
   padding-bottom: 15px;
 }
 
-.links {
-  padding-top: 15px;
+.c-list {
+}
+
+.c-list li {
+  list-style: none;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
 }
 </style>
